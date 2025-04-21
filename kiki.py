@@ -44,15 +44,17 @@ def menu(message):
         btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
         btn4 = types.KeyboardButton('📩Заявки📩')
         btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
         markup.row(btn1, btn2)
-        markup.row(btn3)
+        markup.row(btn3, btn6)
         markup.row(btn4, btn5)
     else:
         btn1 = types.KeyboardButton('📑Создать заявку📑')
         btn2 = types.KeyboardButton('❓Задать вопрос❓')
         btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
+        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
         markup.row(btn1, btn2)
-        markup.row(btn3)
+        markup.row(btn3, btn6)
     bot.send_message(message.chat.id, 'Выберите действие:', reply_markup=markup)
     bot.register_next_step_handler(message, on_click)
     return
@@ -69,6 +71,8 @@ def on_click(message):
         buy_process(message)
     elif message.text == '⁉️Вопросы⁉️':
         questions(message)
+    elif message.text == '📢НАШ TELEGRAM📢':
+        transition(message)
 
 def notification_ticket(message):
     chat_id = 1389316365
@@ -81,6 +85,12 @@ def notification_question(message):
     chat_id2 = 379313116 # Сюда помещаем id пользователя кому будет отправлено сообщение
     bot.send_message(chat_id, f'Новый вопрос: {message.text}')
     bot.send_message(chat_id2, f'Новый вопрос: {message.text}')
+
+def transition(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    markup.add(types.InlineKeyboardButton('Перейти', url = 'https://t.me/carmax82'))
+    markup.add(types.InlineKeyboardButton('Назад', callback_data = 'cancel_user'))
+    bot.send_message(message.chat.id, 'Вы уверены что хотите перейти в наш телеграм канал?', reply_markup=markup)
 
 def buy_process(message):
     bot.send_message(message.chat.id, 'Процесс покупки авто из Кореи:\n\n'
@@ -391,9 +401,10 @@ def callback(call):
             btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
             btn4 = types.KeyboardButton('📩Заявки📩')
             btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+            btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
             markup.row(btn1, btn2)
-            markup.row(btn3)
-            markup.row(btn4, btn5)
+            markup.row(btn3. btn4)
+            markup.row(btn5, btn6)
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
     elif call.data == 'cancel':
@@ -403,9 +414,21 @@ def callback(call):
         btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
         btn4 = types.KeyboardButton('📩Заявки📩')
         btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
         markup.row(btn1, btn2)
-        markup.row(btn3)
-        markup.row(btn4, btn5)
+        markup.row(btn3, btn4)
+        markup.row(btn5, btn6)
+        bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
+        bot.register_next_step_handler(call.message, on_click)
+        return
+    elif call.data == 'cancel_user':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+        btn1 = types.KeyboardButton('📑Создать заявку📑')
+        btn2 = types.KeyboardButton('❓Задать вопрос❓')
+        btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
+        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
+        markup.row(btn1, btn2)
+        markup.row(btn3, btn6)
         bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
         bot.register_next_step_handler(call.message, on_click)
         return
@@ -441,9 +464,10 @@ def callback(call):
             btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
             btn4 = types.KeyboardButton('📩Заявки📩')
             btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+            btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
             markup.row(btn1, btn2)
-            markup.row(btn3)
-            markup.row(btn4, btn5)
+            markup.row(btn3, btn4)
+            markup.row(btn5, btn6)
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
             return
@@ -463,9 +487,10 @@ def callback(call):
             btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
             btn4 = types.KeyboardButton('📩Заявки📩')
             btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+            btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
             markup.row(btn1, btn2)
-            markup.row(btn3)
-            markup.row(btn4, btn5)
+            markup.row(btn3, btn4)
+            markup.row(btn5, btn6)
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
             return
@@ -477,9 +502,10 @@ def callback(call):
             btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
             btn4 = types.KeyboardButton('📩Заявки📩')
             btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
+            btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
             markup.row(btn1, btn2)
-            markup.row(btn3)
-            markup.row(btn4, btn5)
+            markup.row(btn3, btn4)
+            markup.row(btn5, btn6)
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
             return
