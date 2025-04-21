@@ -88,7 +88,7 @@ def notification_question(message):
 
 def transition(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
-    markup.add(types.InlineKeyboardButton('Перейти', url = 'https://t.me/carmax82'))
+    markup.add(types.InlineKeyboardButton('Перейти', url = 'https://t.me/+035XTmuA4kY1ZGRl'))
     markup.add(types.InlineKeyboardButton('Назад', callback_data = 'cancel'))
     bot.send_message(message.chat.id, 'Вы уверены что хотите перейти в наш телеграм канал?', reply_markup=markup)
 
