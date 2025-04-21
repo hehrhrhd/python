@@ -38,7 +38,7 @@ def start(message):
 
 def menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-    if str(message.from_user.id) in admin and message.from_user.first_name in admin:
+    if str(message.from_user.id) or str(call.message.from_user.id) in admin and message.from_user.first_name or call.message.from_user.first_name in admin:
         btn1 = types.KeyboardButton('📑Создать заявку📑')
         btn2 = types.KeyboardButton('❓Задать вопрос❓')
         btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
@@ -89,7 +89,7 @@ def notification_question(message):
 def transition(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(types.InlineKeyboardButton('Перейти', url = 'https://t.me/carmax82'))
-    markup.add(types.InlineKeyboardButton('Назад', callback_data = 'cancel_user'))
+    markup.add(types.InlineKeyboardButton('Назад', callback_data = 'cancel'))
     bot.send_message(message.chat.id, 'Вы уверены что хотите перейти в наш телеграм канал?', reply_markup=markup)
 
 def buy_process(message):
@@ -408,29 +408,7 @@ def callback(call):
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
     elif call.data == 'cancel':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-        btn1 = types.KeyboardButton('📑Создать заявку📑')
-        btn2 = types.KeyboardButton('❓Задать вопрос❓')
-        btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
-        btn4 = types.KeyboardButton('📩Заявки📩')
-        btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
-        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
-        markup.row(btn1, btn2)
-        markup.row(btn3, btn4)
-        markup.row(btn5, btn6)
-        bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
-        bot.register_next_step_handler(call.message, on_click)
-        return
-    elif call.data == 'cancel_user':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-        btn1 = types.KeyboardButton('📑Создать заявку📑')
-        btn2 = types.KeyboardButton('❓Задать вопрос❓')
-        btn3 = types.KeyboardButton('🔄Процесс покупки🔄')
-        btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
-        markup.row(btn1, btn2)
-        markup.row(btn3, btn6)
-        bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
-        bot.register_next_step_handler(call.message, on_click)
+        menu(call.message)
         return
     elif call.data == 'questions':
         try:
