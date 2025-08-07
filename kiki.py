@@ -26,7 +26,7 @@ def start(message):
     conn = sqlite3.connect('carmax3.sql')
     cur = conn.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200) DEFAULT NULL)''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200) DEFAULT NULL, tg_id INTEGER, full_name VARCHAR(50))''')
     conn.commit()
     cur.close()
     conn.close()
@@ -114,7 +114,7 @@ def make_question(message):
     conn = sqlite3.connect('carmax3.sql')
     cur = conn.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200) DEFAULT NULL)''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200) DEFAULT NULL, tg_id INTEGER)''')
     conn.commit()
     cur.close()
     conn.close()
@@ -162,7 +162,7 @@ def ticket_create(message):
     conn = sqlite3.connect('carmax3.sql')
     cur = conn.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200))''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, nameuser VARCHAR(50), cityuser VARCHAR(50), carname VARCHAR(50), yearp VARCHAR(10), capacity VARCHAR(40), fuel VARCHAR(50), drive VARCHAR(50), mileage VARCHAR(50), color VARCHAR(50), allowedcar VARCHAR(50),budget VARCHAR(50), datacontact VARCHAR(50), questions VARCHAR(200), tg_id INTEGER, full_name VARCHAR(50))''')
     conn.commit()
     cur.close()
     conn.close()
@@ -357,7 +357,7 @@ def data_contact(message):
     conn = sqlite3.connect('carmax3.sql')
     cur = conn.cursor()
 
-    cur.execute("INSERT INTO tickets (nameuser, cityuser, carname, yearp, capacity, fuel, drive, mileage, color, allowedcar, budget,datacontact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(name_of_user, city_user, car_name, year_auto, capacity_engine_auto, fuel_type_auto, drive_type_auto, mileage_auto, color_auto, allowed_car_auto, budget_auto, data_contact_auto))
+    cur.execute("INSERT INTO tickets (nameuser, cityuser, carname, yearp, capacity, fuel, drive, mileage, color, allowedcar, budget, datacontact, tg_id, full_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(name_of_user, city_user, car_name, year_auto, capacity_engine_auto, fuel_type_auto, drive_type_auto, mileage_auto, color_auto, allowed_car_auto, budget_auto, data_contact_auto, message.from_user.id, message.from_user.full_name))
     conn.commit()
     cur.close()
     conn.close()
@@ -386,12 +386,12 @@ def callback(call):
             info = ''
             for el in tickets:
                 if el[1] != None:
-                    info += f'#️⃣Номер заявки: {el[0]}\n 😀Имя клиента: {el[1]}\n 🌁Город клиента: {el[2]}\n 🚗Название машины: {el[3]}\n ⌛Год машины: {el[4]}\n ⚙️Объём двигателя: {el[5]}\n ⛽Тип топлива: {el[6]}\n 🔧Привод: {el[7]}\n 🛣️Пробег: {el[8]}\n 🎨Цвет кузова/салона: {el[9]}\n 🛠️Допустимые косяки: {el[10]}\n 💸Бюджет: {el[11]}\n ☎️Контакты клиента: {el[12]}\n\n'
+                    info += f'#️⃣Номер заявки: {el[0]}\n 😀Имя клиента: {el[1]}\n 🌁Город клиента: {el[2]}\n 🚗Название машины: {el[3]}\n ⌛Год машины: {el[4]}\n ⚙️Объём двигателя: {el[5]}\n ⛽Тип топлива: {el[6]}\n 🔧Привод: {el[7]}\n 🛣️Пробег: {el[8]}\n 🎨Цвет кузова/салона: {el[9]}\n 🛠️Допустимые косяки: {el[10]}\n 💸Бюджет: {el[11]}\n ☎️Контакты клиента: {el[12]}\n ЛС клиента: <a href="tg://user?id={el[14]}">Открыть профиль</a>\n\n'
 
             cur.close()
             conn.close()
 
-            bot.send_message(call.message.chat.id, info , reply_markup=markup)
+            bot.send_message(call.message.chat.id, info , reply_markup=markup, parse_mode="HTML")
             bot.register_next_step_handler(call.message, clear_list)
         except (sqlite3.OperationalError, telebot.apihelper.ApiTelegramException):
             bot.send_message(call.message.chat.id, 'Таблицы не существует')
@@ -403,7 +403,7 @@ def callback(call):
             btn5 = types.KeyboardButton('⁉️Вопросы⁉️')
             btn6 = types.KeyboardButton('📢НАШ TELEGRAM📢')
             markup.row(btn1, btn2)
-            markup.row(btn3. btn4)
+            markup.row(btn3, btn4)
             markup.row(btn5, btn6)
             bot.send_message(call.message.chat.id, 'Выберите действие:', reply_markup=markup)
             bot.register_next_step_handler(call.message, on_click)
